@@ -1,2 +1,2 @@
-python-instagram
-pytumblr
+PyTumblr>=0.0.6
+python-instagram>=1.3.1
