@@ -5,6 +5,7 @@ import pytumblr
 from datetime import datetime
 import os
 import ConfigParser
+import httplib2
 
 config = ConfigParser.ConfigParser()
 config.read("creds.ini")
@@ -47,8 +48,12 @@ def get_ig_media():
   return medialist[0]
 
 def process_feed():
-  client = get_tumblr_client()
-  medialist = get_ig_media()
+  try:
+    client = get_tumblr_client()
+    medialist = get_ig_media()
+  except httplib2.ServerNotFoundError:
+    # silently fail on instagram API issues- this is usually just flaky DNS.
+    return None
   post_date = get_last_post_date(tag='instagram')
   #print post_date
   if not post_date:
