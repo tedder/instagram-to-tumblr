@@ -70,6 +70,6 @@ def process_feed():
     #print media.created_time
     if (not post_date) or media.created_time > post_date:
       print "posting now, caption: " + caption
-      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time)
+      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time, tweet=caption)
 
 process_feed()
