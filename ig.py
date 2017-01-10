@@ -1,4 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
+
+# pytumblr is only py2 as of 0.0.6, Jan 2017.
 
 from instagram.client import InstagramAPI
 import pytumblr
