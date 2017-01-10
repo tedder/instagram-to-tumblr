@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 from instagram.client import InstagramAPI
 import pytumblr
@@ -58,7 +58,7 @@ def process_feed():
   post_date = get_last_post_date(tag='instagram')
   #print post_date
   if not post_date:
-    print "we should have a post_date, it's weird there is none. bailing."
+    print("we should have a post_date, it's weird there is none. bailing.")
     return None
 
   for media in reversed(medialist):
@@ -70,7 +70,7 @@ def process_feed():
     #print post_date
     #print media.created_time
     if (not post_date) or media.created_time > post_date:
-      print "posting now, caption: " + caption
+      print("posting now, caption: " + caption)
       client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time, tweet="{0} [URL]".format(textwrap.shorten(caption, width=120, placeholder="...")))
 
 process_feed()
