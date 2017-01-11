@@ -8,10 +8,17 @@ from datetime import datetime
 import os
 import ConfigParser
 import httplib2
-import textwrap
+#import textwrap
 
 config = ConfigParser.ConfigParser()
 config.read("creds.ini")
+
+def _shorten(text, width=80, placeholder='...'):
+  # textwrap.shorten() would do this in 3.4 and up, but pytumblr limits us to py2.
+  if len(text) < width:
+    return text
+  narrow_width = width - len(placeholder)
+  return text[:narrow_width].strip() + placeholder
 
 def get_tumblr_client():
   # Authenticate via OAuth
@@ -73,6 +80,6 @@ def process_feed():
     #print media.created_time
     if (not post_date) or media.created_time > post_date:
       print("posting now, caption: " + caption)
-      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time, tweet="{0} [URL]".format(textwrap.shorten(caption, width=120, placeholder="...")))
+      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time, tweet="{0} [URL]".format(_shorten(caption, width=120, placeholder="...")))
 
 process_feed()
