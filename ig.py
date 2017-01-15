@@ -9,6 +9,8 @@ import os
 import ConfigParser
 import httplib2
 #import textwrap
+import re
+import sys
 
 config = ConfigParser.ConfigParser()
 config.read("creds.ini")
@@ -71,15 +73,22 @@ def process_feed():
     return None
 
   for media in reversed(medialist):
+    if post_date and media.created_time <= post_date:
+      # already posted/in the past
+      continue
     #print dir(media)
     #print media.images.get('standard_resolution').url
     caption = ''
     if media.caption:
       caption = media.caption.text
+    tweet_with_at = re.sub(r'\b_(\w+)\b', r'@\1', caption)
+    if (not tweet_with_at) or (not len(tweet_with_at)):
+      tweet_with_at = "posted: "
+    tweet = "{} [URL]".format(_shorten(caption, width=120, placeholder='...'))
     #print post_date
     #print media.created_time
     if (not post_date) or media.created_time > post_date:
       print("posting now, caption: " + caption)
-      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time, tweet="{0} [URL]".format(_shorten(caption, width=120, placeholder="...")))
+      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time, tweet=tweet)
 
 process_feed()
