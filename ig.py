@@ -84,11 +84,11 @@ def process_feed():
     tweet_with_at = re.sub(r'\b_(\w+)\b', r'@\1', caption)
     if (not tweet_with_at) or (not len(tweet_with_at)):
       tweet_with_at = "posted: "
-    tweet = "{} [URL]".format(_shorten(caption, width=120, placeholder='...'))
+    tweet = "{} [URL]".format(_shorten(caption.encode('ascii', 'ignore'), width=120, placeholder='...'))
     #print post_date
     #print media.created_time
     if (not post_date) or media.created_time > post_date:
       print("posting now, caption: " + caption)
-      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption), date=media.created_time, tweet=tweet)
+      client.create_photo('tedder42.tumblr.com', state='published', tags=['instagram'], source=media.images.get('standard_resolution').url, format='markdown', caption=('## ' + caption.encode('ascii', 'ignore')), date=media.created_time, tweet=tweet)
 
 process_feed()
